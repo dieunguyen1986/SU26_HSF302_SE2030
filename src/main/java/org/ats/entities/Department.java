@@ -3,13 +3,17 @@ package org.ats.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "departments")
 @NoArgsConstructor@AllArgsConstructor
 @Setter@Getter
 @ToString
-public class Department extends  BaseEntity{
+@Builder
+public class Department extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,4 +25,20 @@ public class Department extends  BaseEntity{
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Override
+    public boolean equals(Object o) {
+        System.out.println("Equals method!");
+        if (o == null || getClass() != o.getClass()) return false;
+        Department that = (Department) o;
+        return Objects.equals(id, that.id) && Objects.equals(departmentName, that.departmentName) && Objects.equals(description, that.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, departmentName, description);
+    }
+
+    // List or Set
+    @OneToMany(mappedBy = "department")
+    private Set<User> users;
 }
