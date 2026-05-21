@@ -3,6 +3,9 @@ package org.ats.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 @Setter@Getter
@@ -39,5 +42,8 @@ public class User extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     private Department department;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Job> jobs = new HashSet<>();
 
 }

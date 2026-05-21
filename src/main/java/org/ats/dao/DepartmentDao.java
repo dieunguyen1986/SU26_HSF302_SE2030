@@ -10,6 +10,8 @@ public interface DepartmentDao {
 
     Department update(Department dept);
 
+    Optional<Department> getByIdWithHibernate(Long id);
+
     Optional<Department> getById(Long id);
 
     void delete(Long id);

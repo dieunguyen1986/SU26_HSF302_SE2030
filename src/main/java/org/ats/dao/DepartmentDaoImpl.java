@@ -3,10 +3,13 @@ package org.ats.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import org.ats.entities.Department;
+import org.ats.entities.User;
 import org.ats.utils.DbContext;
+import org.hibernate.Session;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class DepartmentDaoImpl implements DepartmentDao {
     private EntityManager entityManager;
@@ -44,7 +47,35 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     @Override
     public Optional<Department> getById(Long id) {
-        return Optional.empty();
+        Department dept = entityManager.find(Department.class, id);
+
+        return dept == null ? Optional.empty() : Optional.of(dept);
+    }
+
+
+    @Override
+    public Optional<Department> getByIdWithHibernate(Long id) {
+
+        Session session = null;
+        try {
+            session = entityManager.unwrap(Session.class);
+            Department dept = session.find(Department.class, id);
+
+            Set<User> users = dept.getUsers();
+
+            System.out.println(users);
+
+            return dept == null ? Optional.empty() : Optional.of(dept);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+
+
     }
 
     @Override

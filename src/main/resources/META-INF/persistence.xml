@@ -14,6 +14,9 @@
 
         <!-- Entity Classes -->
         <class>org.ats.entities.Department</class>
+        <class>org.ats.entities.Job</class>
+        <class>org.ats.entities.JobSkill</class>
+        <class>org.ats.entities.JobSkill</class>
 
         <properties>
 

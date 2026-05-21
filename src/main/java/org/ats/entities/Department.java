@@ -3,6 +3,7 @@ package org.ats.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ import java.util.Set;
 @Table(name = "departments")
 @NoArgsConstructor@AllArgsConstructor
 @Setter@Getter
-@ToString
+@ToString(exclude = {"users", "jobs"})
 @Builder
 public class Department extends BaseEntity{
     @Id
@@ -40,5 +41,8 @@ public class Department extends BaseEntity{
 
     // List or Set
     @OneToMany(mappedBy = "department")
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
+
+    @OneToMany(mappedBy = "department")
+    private Set<Job> jobs = new HashSet<>();
 }
