@@ -15,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"jobSkills"})
 public class Job extends BaseEntity {
 
     @Id

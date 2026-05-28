@@ -1,10 +1,13 @@
 package org.ats.dao;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.ats.entities.Job;
 import org.ats.utils.DbContext;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.context.annotation.Scope;
+
 
 public class JobDaoImpl implements JobDao {
 
@@ -19,6 +22,8 @@ public class JobDaoImpl implements JobDao {
 
         // Try - resources
         Transaction tx = null;
+        entityManager = DbContext.getEntityManager();
+
         try (Session session = entityManager.unwrap(Session.class);) {
             tx = session.getTransaction();
 
@@ -35,5 +40,17 @@ public class JobDaoImpl implements JobDao {
         }
 
         return job;
+    }
+
+    @Override
+    public boolean isExisted(String title) {
+        try (Session session = entityManager.unwrap(Session.class);) {
+            TypedQuery<Long> query = session.createQuery("SELECT COUNT(j) FROM Job j " +
+                    "WHERE j.title = :param", Long.class);
+            query.setParameter("param", title);
+
+            Long result = query.getSingleResult();
+            return result > 0;
+        }
     }
 }

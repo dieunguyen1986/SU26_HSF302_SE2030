@@ -96,16 +96,16 @@ class JobDaoImplTest {
         job.setTitle("Frontend React Developer");
 
         job.setDescription("""
-    We are seeking a Frontend React Developer 
-    to build modern web applications using ReactJS, TypeScript, 
-    and RESTful APIs.
-
-    Requirements:
-    - Experience with ReactJS and Redux
-    - Understanding responsive UI/UX
-    - Familiar with Git and Agile/Scrum
-    - Basic knowledge of backend APIs
-    """);
+                We are seeking a Frontend React Developer 
+                to build modern web applications using ReactJS, TypeScript, 
+                and RESTful APIs.
+                
+                Requirements:
+                - Experience with ReactJS and Redux
+                - Understanding responsive UI/UX
+                - Familiar with Git and Agile/Scrum
+                - Basic knowledge of backend APIs
+                """);
 
         job.setLocation("Da Nang, Vietnam");
 

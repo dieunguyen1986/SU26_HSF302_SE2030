@@ -4,4 +4,6 @@ import org.ats.entities.Job;
 
 public interface JobDao {
     Job createJob(Job job);
+
+    boolean isExisted(String title);
 }
