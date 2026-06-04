@@ -1,43 +1,32 @@
 package org.ats.dao;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
+import lombok.RequiredArgsConstructor;
 import org.ats.entities.Department;
 import org.ats.entities.User;
-import org.ats.utils.DbContext;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Repository // Spring Bean
+@RequiredArgsConstructor
 public class DepartmentDaoImpl implements DepartmentDao {
-    private EntityManager entityManager;
 
-    public DepartmentDaoImpl() {
-        entityManager = DbContext.getEntityManager();
-    }
+    // Inject: SessionFactory
+    private final SessionFactory sessionFactory;
 
     @Override
+    @Transactional
     public Department create(Department dept) {
         // How to connect
-        EntityTransaction transaction = null;
-        try {
-            transaction = entityManager.getTransaction();
+        Session session = sessionFactory.openSession(); // Open connection
+        session.persist(dept);
+        return dept;
 
-            transaction.begin();
-
-            entityManager.persist(dept);
-
-            transaction.commit();
-
-            return dept;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -47,7 +36,8 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     @Override
     public Optional<Department> getById(Long id) {
-        Department dept = entityManager.find(Department.class, id);
+        Session session = sessionFactory.openSession();
+        Department dept = session.find(Department.class, id);
 
         return dept == null ? Optional.empty() : Optional.of(dept);
     }
@@ -57,23 +47,14 @@ public class DepartmentDaoImpl implements DepartmentDao {
     public Optional<Department> getByIdWithHibernate(Long id) {
 
         Session session = null;
-        try {
-            session = entityManager.unwrap(Session.class);
-            Department dept = session.find(Department.class, id);
+        session = sessionFactory.openSession();
+        Department dept = session.find(Department.class, id);
 
-            Set<User> users = dept.getUsers();
+        Set<User> users = dept.getUsers();
 
-            System.out.println(users);
+        System.out.println(users);
 
-            return dept == null ? Optional.empty() : Optional.of(dept);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
+        return dept == null ? Optional.empty() : Optional.of(dept);
 
 
     }

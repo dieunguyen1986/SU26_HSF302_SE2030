@@ -1,5 +1,6 @@
 package org.ats;
 
+import org.ats.config.WebConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**

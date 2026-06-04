@@ -15,7 +15,7 @@ public class IndexController {
 
 
         // View
-        return "index"; // prefix + index + suffix --> /WEB-INF/index.jsp
+        return "login"; // prefix + index + suffix --> /WEB-INF/index.jsp
     }
 
 }

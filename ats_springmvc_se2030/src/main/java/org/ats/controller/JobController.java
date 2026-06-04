@@ -2,6 +2,7 @@ package org.ats.controller;
 
 import org.ats.entities.Job;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,9 +18,14 @@ public class JobController {
         return null;
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public List<Job> search(){
 
+        return null;
+    }
+
+    @GetMapping
+    public List<Job> findAll(Model model){
         return null;
     }
 }
