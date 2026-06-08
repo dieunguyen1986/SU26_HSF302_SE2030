@@ -63,7 +63,17 @@
                 </tr>
                 </thead>
                 <tbody>
-
+                    <tr th:each="job: ${jobs}">
+                        <td th:text="${job.id}"></td>
+                        <td th:text="${job.title}"></td>
+                        <td th:text="${job.location}"></td>
+                        <td th:text="${job.description}"></td>
+                        <td th:text="${job.salaryMin}"></td>
+                        <td th:text="${job.salaryMax}"></td>
+                        <td th:text="${job.deadline}"></td>
+                        <td th:text="${job.publishedAt}"></td>
+                        <td th:text="${job.status}"></td>
+                    </tr>
                 </tbody>
             </table>
 

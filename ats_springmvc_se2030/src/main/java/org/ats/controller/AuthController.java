@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.ats.dto.UserRequest;
 import org.ats.entities.User;
 import org.ats.services.AuthService;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -31,22 +30,15 @@ public class AuthController {
     @PostMapping
     public String processLogin(@RequestParam(name = "email") String email,
                                @RequestParam(name = "password") String password,
-                               Model model,
                                HttpSession session
     ) {
 
         log.info("User Credentials {}{}", email, password);
 
         // Call service
-//        try {
-            User user = authService.authenticate(new UserRequest(email, password));
-            session.setAttribute("user", user);
+        User user = authService.authenticate(new UserRequest(email, password));
+        session.setAttribute("user", user);
 
-//        } catch (Exception e) {
-//            model.addAttribute("error", "Wrong email or password");
-//            return "login";
-//        }
-
-        return "forward:/jobs";
+        return "redirect:/jobs/search";
     }
 }

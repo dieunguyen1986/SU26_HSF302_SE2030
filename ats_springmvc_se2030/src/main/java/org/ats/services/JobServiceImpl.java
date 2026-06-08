@@ -1,19 +1,18 @@
 package org.ats.services;
 
+import lombok.RequiredArgsConstructor;
 import org.ats.dao.JobDao;
-import org.ats.dao.JobDaoImpl;
 import org.ats.entities.Job;
 import org.ats.entities.JobStatus;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class JobServiceImpl implements JobService {
 
-    private JobDao jobDao;  //= new JobDaoImpl(); // IS-A - Down casting
-
-    public JobServiceImpl(JobDao jobDao) {
-        this.jobDao = jobDao;
-    }
+    private final JobDao jobDao;  //= new JobDaoImpl(); // IS-A - Down casting
 
     @Override
     public Job createJob(Job job) {
@@ -55,6 +54,10 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<Job> search(String keyword) {
-        return List.of();
+        if(keyword == null || keyword.isEmpty()) {
+            return jobDao.findAll();
+        }
+
+        return jobDao.search("%" + keyword + "%");
     }
 }
