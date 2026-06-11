@@ -66,6 +66,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     @Override
     public List<Department> findAll() {
-        return List.of();
+        Session session = sessionFactory.openSession();
+        return session.createQuery("FROM Department", Department.class).list();
     }
 }

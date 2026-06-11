@@ -12,4 +12,6 @@ public interface JobDao {
     List<Job> search(String keyword);
 
     List<Job> findAll();
+
+    public Job findById(Long id);
 }

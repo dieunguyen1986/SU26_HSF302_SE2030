@@ -53,4 +53,9 @@ public class JobDaoImpl implements JobDao {
         Session session = sessionFactory.openSession();
         return session.createQuery("FROM Job").getResultList();
     }
+
+    @Override
+    public Job findById(Long id){
+        return sessionFactory.openSession().get(Job.class, id);
+    }
 }

@@ -13,4 +13,10 @@ public class GlobalException {
         model.addAttribute("error", "Wrong email or password");
         return "login";
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public String notFound(NoResultException ex, Model model) {
+        model.addAttribute("Object not found!");
+        return "404";
+    }
 }
