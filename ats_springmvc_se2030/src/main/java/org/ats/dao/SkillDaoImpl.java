@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.ats.entities.Skill;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,6 @@ public class SkillDaoImpl implements  SkillDao {
 
     @Override
     public List<Skill> findAll() {
-        return sessionFactory.openSession().createQuery("FROM Skill", Skill.class).list();
+        return sessionFactory.getCurrentSession().createQuery("FROM Skill", Skill.class).list();
     }
 }
