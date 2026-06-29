@@ -2,6 +2,7 @@ package org.ats.services;
 
 import org.ats.dto.JobRequest;
 import org.ats.entities.Job;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,6 +15,6 @@ public interface JobService {
 
     void delete(Long id);
 
-    List<Job> search(String keyword);
+    Page<Job> search(String keyword, Integer pageIndex, Integer pageSize);
     public JobRequest findById(Long id);
 }

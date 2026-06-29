@@ -1,5 +1,6 @@
 package org.ats.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.NoResultException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,6 +17,11 @@ public class GlobalException {
 
     @ExceptionHandler(RuntimeException.class)
     public String notFound(NoResultException ex, Model model) {
+        model.addAttribute("Object not found!");
+        return "404";
+    }
+    @ExceptionHandler(EntityNotFoundException.class)
+    public String notFound(EntityNotFoundException ex, Model model) {
         model.addAttribute("Object not found!");
         return "404";
     }

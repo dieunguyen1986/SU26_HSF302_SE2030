@@ -8,6 +8,7 @@ import org.ats.entities.Skill;
 import org.ats.services.DepartmentService;
 import org.ats.services.JobService;
 import org.ats.services.SkillService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class JobController {
 
         // Add to model
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("job_detail");
+        mv.setViewName("views/jobs/job_detail");
         mv.addObject("departments", departments);
         mv.addObject("skills", skills);
         mv.addObject("job", new JobRequest());
@@ -48,7 +49,7 @@ public class JobController {
         model.addAttribute("skills", skillService.findAll());
 
         model.addAttribute("job", job);
-        return "job_detail";
+        return "views/jobs/job_detail";
     }
 
 
@@ -67,12 +68,30 @@ public class JobController {
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam(name = "keyword", required = false) String keyword,
+    public String search(
+            @RequestParam(name = "pageIndex",defaultValue = "0", required = false) Integer pageIndex,
+            @RequestParam(name = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+            @RequestParam(name = "keyword", required = false) String keyword,
                          Model model) {
 
-        List<Job> jobs = jobService.search(keyword);
-        model.addAttribute("jobs", jobs);
-        return "recruiter_manage_jobs";
+        Page<Job> page = jobService.search(keyword, pageIndex, pageSize);
+        model.addAttribute("jobs", page.getContent());
+        model.addAttribute("totalPage", page.getTotalPages());
+        return "views/jobs/recruiter_manage_jobs";
+    }
+
+    @GetMapping("/browse")
+    public String browse(@RequestParam(name = "pageIndex",defaultValue = "0", required = false) Integer pageIndex,
+            @RequestParam(name = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+            @RequestParam(name = "keyword", required = false) String keyword,
+                         Model model) {
+        Page<Job> page = jobService.search(keyword, pageIndex, pageSize);
+
+        model.addAttribute("jobs", page.getContent());
+        model.addAttribute("totalPage", page.getTotalPages());
+        model.addAttribute("currentPage", page.getNumber() + 1);
+//        model.addAttribute("departments", departmentService.findAll());
+        return "views/publics/browse_job";
     }
 
     @DeleteMapping

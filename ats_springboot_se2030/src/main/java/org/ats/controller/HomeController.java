@@ -5,8 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/")
-public class IndexController {
+public class HomeController {
 
     @GetMapping
     public String index(){
@@ -15,7 +14,7 @@ public class IndexController {
 
 
         // View
-        return "login"; // prefix + index + suffix --> /WEB-INF/index.jsp
+        return "views/publics/home"; // prefix + index + suffix --> /WEB-INF/index.jsp
     }
 
 }

@@ -11,7 +11,7 @@
         <div class="col-md-3  border rounded-3 p-5 shadow-lg bg-light" style="height: 50vh;">
             <h3 class="text-center mb-3">Login</h3>
             <p class="text-danger" th:text ="${error}"></p>
-            <form th:action="@{/login}" method="post">
+            <form th:action="@{/auth}" method="post">
                 <div class="mb-3">
                     <input type="email" name="email" placeholder="admin@example.com" class="form-control" id="email" aria-describedby="emailHelp">
                     <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>

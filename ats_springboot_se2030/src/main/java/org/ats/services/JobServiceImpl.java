@@ -1,20 +1,25 @@
 package org.ats.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.ats.dao.JobDao;
 import org.ats.dto.JobRequest;
 import org.ats.entities.*;
+import org.ats.repositoties.JobRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+import java.util.Optional;
+import java.util.function.Supplier;
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class JobServiceImpl implements JobService {
-
-    private final JobDao jobDao;  //= new JobDaoImpl(); // IS-A - Down casting
+    private  final JobRepository jobRepository;
 
     @Override
     public Job createJob(JobRequest jobRequest) {
@@ -22,7 +27,7 @@ public class JobServiceImpl implements JobService {
         // Check existing by title
         // Throw
 
-        if (jobDao.isExisted(jobRequest.getTitle())) {
+        if (jobRepository.existsByTitle(jobRequest.getTitle())) {
             // Un-checked
             throw new RuntimeException("Job with title " + jobRequest.getTitle() + " already exists.");
         }
@@ -36,17 +41,17 @@ public class JobServiceImpl implements JobService {
 
 
         // Call DAO
-        return jobDao.createJob(job);
+        return jobRepository.save(job);
 
     }
 
     @Override
     public Job updateJob(JobRequest req) {
         // Load entity đang managed trong transaction hiện tại
-        Job job = jobDao.findById(req.getId());
-        if (job == null) {
-            throw new RuntimeException("Job with id " + req.getId() + " not found.");
-        }
+
+        Job job = jobRepository.findById(req.getId()).orElseThrow(()->{
+            return new EntityNotFoundException("Job with id " + req.getId() + " not found.");
+        });
 
         // Validate salary (null-safe)
         if (req.getMinSalary() != null && req.getMaxSalary() != null
@@ -92,29 +97,35 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<Job> findAll() {
-        return jobDao.findAll();
+        return jobRepository.findAll();
     }
 
     @Override
+
     public void delete(Long id) {
-        jobDao.delete(id);
+        if (id== null) {
+            throw new EntityNotFoundException("Job with id " + id + " not found.");
+        }
+        jobRepository.deleteById(id);
     }
 
     @Override
-    public List<Job> search(String keyword) {
+    public Page<Job> search(String keyword, Integer pageIndex, Integer pageSize) {
+        //
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
         if (keyword == null || keyword.isEmpty()) {
-            return jobDao.findAll();
+            return jobRepository.findByStatus(pageable, "PUBLISHED");
         }
 
-        return jobDao.search("%" + keyword + "%");
+        return jobRepository.findJobByPage(pageable, "%" + keyword + "%");
     }
 
     @Override
     public JobRequest findById(Long id) {
-        Job job = jobDao.findById(id);
-        if (job == null) {
-            throw new RuntimeException("Job with id " + id + " not found.");
-        }
+        Job job = jobRepository.findById(id).orElseThrow(()->{
+            return new EntityNotFoundException("Job with id " + id+ " not found.");
+        });
 
         JobRequest jobRequest = JobRequest.builder()
                 .id(job.getId())
@@ -186,3 +197,4 @@ public class JobServiceImpl implements JobService {
     }
 
 }
+
